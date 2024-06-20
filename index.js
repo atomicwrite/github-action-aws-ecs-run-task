@@ -90,14 +90,16 @@ const main = async () => {
         core.debug(JSON.stringify(taskRequestParams))
         core.debug(`Starting task.`)
         let task = await ecs.runTask(taskRequestParams).promise();
-
+        
         // Get taskArn and taskId
         const taskArn = task.tasks[0].taskArn;
         const taskId = taskArn.split('/').pop();
         core.setOutput('task-arn', taskArn);
         core.setOutput('task-id', taskId);
         core.info(`Starting Task with ARN: ${taskArn}\n`);
-
+        if(!waitFortaskToEnd ){
+            return;
+        }
         // Wait for task to be in running state
         core.debug(`Waiting for task to be in running state.`)
         await ecs.waitFor('tasksRunning', {cluster, tasks: [taskArn]}).promise();
