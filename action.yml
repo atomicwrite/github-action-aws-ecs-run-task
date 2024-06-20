@@ -24,6 +24,12 @@ inputs:
       with one subnet ID per line.
     required: true
 
+  wait-for-task-to-end:
+    description: >-
+      If set to true, will wait for task to end
+    required: false
+    default: 'true'
+    
   assign-public-ip:
     description: >-
       Assign public a IP to the task.
