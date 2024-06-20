@@ -98,6 +98,7 @@ const main = async () => {
         core.setOutput('task-id', taskId);
         core.info(`Starting Task with ARN: ${taskArn}\n`);
         if(!waitFortaskToEnd ){
+            core.info(`Not waiting for Task with  ARN: ${taskArn}\n`);
             return;
         }
         // Wait for task to be in running state
