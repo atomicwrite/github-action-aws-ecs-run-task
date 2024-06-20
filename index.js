@@ -154,6 +154,7 @@ const main = async () => {
             }
         }
         if (waitFortaskToEnd){
+        core.info(`Waiting for Task with ARN: ${taskArn}\n`);
         // Wait for Task to finish
         core.debug(`Waiting for task to finish.`);
         if (waitFortaskToEnd){
