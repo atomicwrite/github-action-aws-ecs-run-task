@@ -97,7 +97,7 @@ const main = async () => {
         core.setOutput('task-arn', taskArn);
         core.setOutput('task-id', taskId);
         core.info(`Starting Task with ARN: ${taskArn}\n`);
-        if(!waitFortaskToEnd ){
+        if(!tailLogs  || !waitFortaskToEnd ){
             core.info(`Not waiting for Task with  ARN: ${taskArn}\n`);
             return;
         }
