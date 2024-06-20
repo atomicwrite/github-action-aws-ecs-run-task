@@ -106,7 +106,7 @@ const main = async () => {
         let logFilterStream = null;
         let logOutput = '';
 
-        if (tailLogs) {
+        if (!waitFortaskToEnd && tailLogs) {
             core.debug(`Logging enabled. Getting logConfiguration from TaskDefinition.`)
             let taskDef = await ecs.describeTaskDefinition({taskDefinition: taskDefinition}).promise();
             taskDef = taskDef.taskDefinition
@@ -153,7 +153,7 @@ const main = async () => {
                 });
             }
         }
-
+        if (waitFortaskToEnd){
         // Wait for Task to finish
         core.debug(`Waiting for task to finish.`);
         if (waitFortaskToEnd){
@@ -180,6 +180,7 @@ const main = async () => {
         if (task.tasks[0].containers[0].exitCode !== 0) {
             core.info(`Task failed, see details on Amazon ECS console: https://console.aws.amazon.com/ecs/home?region=${aws.config.region}#/clusters/${cluster}/tasks/${taskId}/details`);
             core.setFailed(task.tasks[0].stoppedReason)
+        }
         }
     } catch (error) {
         core.setFailed(error.message);
