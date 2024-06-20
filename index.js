@@ -22,7 +22,7 @@ const main = async () => {
         const overrideContainerCommand = core.getMultilineInput('override-container-command', {required: false});
         const overrideContainerEnvironment = core.getMultilineInput('override-container-environment', {required: false});
         const taskStoppedWaitForMaxAttempts = parseInt(core.getInput('task-stopped-wait-for-max-attempts', {required: false}));
-
+        const waitFortaskToEnd =  core.getBooleanInput('wait-for-task-to-end', {required: false});
         // Build Task parameters
         const taskRequestParams = {
             count: 1,
@@ -156,12 +156,13 @@ const main = async () => {
 
         // Wait for Task to finish
         core.debug(`Waiting for task to finish.`);
-        await ecs.waitFor('tasksStopped', {
-            cluster,
-            tasks: [taskArn],
-            $waiter: {delay: 6, maxAttempts: taskStoppedWaitForMaxAttempts}}
-        ).promise();
-
+        if (waitFortaskToEnd){
+            await ecs.waitFor('tasksStopped', {
+                cluster,
+                tasks: [taskArn],
+                $waiter: {delay: 6, maxAttempts: taskStoppedWaitForMaxAttempts}}
+            ).promise();
+        }
         // Close LogStream and store output
         if (logFilterStream !== null) {
             core.debug(`Closing logStream.`);
